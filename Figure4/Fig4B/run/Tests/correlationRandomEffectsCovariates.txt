@@ -1,0 +1,5 @@
+eta,covariate,statistics,p-value,test
+eta_tin,source,0.40519,0.668756,Anova
+eta_beta,source,9.98454,0.00019161,Anova
+eta_delta,source,7.82517,0.00099348,Anova
+eta_p,source,8.72093,0.000496183,Anova

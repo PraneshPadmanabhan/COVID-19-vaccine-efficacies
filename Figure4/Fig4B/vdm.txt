@@ -1,0 +1,30 @@
+DESCRIPTION:
+Viral dynamics model.
+
+[LONGITUDINAL]
+input={tin,iniT,iniI,beta,rhoX,k,delta,p,c,sigmaX,phiX,dX}
+
+EQUATION:
+odeType=stiff
+;Initial conditions
+t_0 = tin
+T_0 = iniT
+R_0 = 0
+I1_0 = 0
+I2_0 = iniI
+V_0 = p*I2_0/c
+X_0 = 0
+
+;ODE
+ddt_T = - beta*V*T - rhoX*X*T
+ddt_R = rhoX*X*T
+ddt_I1 = beta*V*T - k*I1
+ddt_I2 = k*I1 - delta*I2
+ddt_V = p*I2 - c*V
+ddt_X = sigmaX*I2*(1-X)/(I2+phiX) - dX*X
+logV = log10(V)
+
+DEFINITION:
+
+OUTPUT:
+output = {logV}

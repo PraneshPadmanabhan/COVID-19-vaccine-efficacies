@@ -1,0 +1,90 @@
+<DATAFILE>
+
+[FILEINFO]
+file='Neant_Kissler_Wolfel_input_monolix.csv'
+delimiter = comma
+header = {ID, digitized_time, logy, cens, source}
+
+[CONTENT]
+ID = {use=identifier}
+digitized_time = {use=time}
+logy = {use=observation, name=logy, type=continuous}
+cens = {use=censored}
+source = {use=covariate, type=categorical}
+
+<MODEL>
+
+[COVARIATE]
+input = source
+
+source = {type=categorical, categories={Kissler, Neant, Wolfel}}
+
+[INDIVIDUAL]
+input = {beta_pop, omega_beta, c_pop, dX_pop, delta_pop, iniI_pop, iniT_pop, p_pop, omega_p, rhoX_pop, sigmaX_pop, tin_pop, omega_tin, omega_delta, k_pop, phiX_pop, source, beta_tin_source_Neant, beta_tin_source_Wolfel}
+
+source = {type=categorical, categories={Kissler, Neant, Wolfel}}
+
+DEFINITION:
+beta = {distribution=logitNormal, max=1e-6, typical=beta_pop, sd=omega_beta}
+c = {distribution=logitNormal, min=5, max=20, typical=c_pop, no-variability}
+dX = {distribution=logNormal, typical=dX_pop, no-variability}
+delta = {distribution=logitNormal, min=0.1, max=3, typical=delta_pop, sd=omega_delta}
+iniI = {distribution=logNormal, typical=iniI_pop, no-variability}
+iniT = {distribution=logNormal, typical=iniT_pop, no-variability}
+p = {distribution=logNormal, typical=p_pop, sd=omega_p}
+rhoX = {distribution=logNormal, typical=rhoX_pop, no-variability}
+sigmaX = {distribution=logNormal, typical=sigmaX_pop, no-variability}
+tin = {distribution=logitNormal, min=-40, max=40, typical=tin_pop, covariate=source, coefficient={0, beta_tin_source_Neant, beta_tin_source_Wolfel}, sd=omega_tin}
+k = {distribution=logNormal, typical=k_pop, no-variability}
+phiX = {distribution=logNormal, typical=phiX_pop, no-variability}
+
+[LONGITUDINAL]
+input = {a}
+
+file = 'vdm.txt'
+
+DEFINITION:
+logy = {distribution=normal, prediction=logV, errorModel=constant(a)}
+
+<FIT>
+data = logy
+model = logy
+
+<PARAMETER>
+a = {value=1.506530570395449, method=MLE}
+beta_pop = {value=0.0000000311811892, method=MLE}
+beta_tin_source_Neant = {value=0.1664652494206822, method=MLE}
+beta_tin_source_Wolfel = {value=0.0433229587516972, method=MLE}
+c_pop = {value=10, method=FIXED}
+dX_pop = {value=0.2, method=FIXED}
+delta_pop = {value=0.9402665040408772, method=MLE}
+iniI_pop = {value=0.0333333, method=FIXED}
+iniT_pop = {value=2666667.000000002, method=FIXED}
+k_pop = {value=4, method=FIXED}
+omega_beta = {value=0.3266499087887157, method=MLE}
+omega_delta = {value=0.7286356725074191, method=MLE}
+omega_p = {value=0.0406548972279889, method=MLE}
+omega_tin = {value=0.0098906004358004, method=MLE}
+p_pop = {value=5354.345145474266, method=MLE}
+phiX_pop = {value=2, method=FIXED}
+rhoX_pop = {value=2, method=FIXED}
+sigmaX_pop = {value=1, method=FIXED}
+tin_pop = {value=-4.597925559530144, method=MLE}
+
+<MONOLIX>
+
+[TASKS]
+populationParameters()
+individualParameters(method = {conditionalMean, conditionalMode })
+fim(method = StochasticApproximation)
+logLikelihood(method = ImportanceSampling)
+plotResult(method = {indfits, parameterdistribution, covariancemodeldiagnosis, covariatemodeldiagnosis, obspred, vpc, npc, residualsscatter, residualsdistribution, randomeffects, saemresults, likelihoodresults })
+
+[SETTINGS]
+GLOBAL:
+seed = 8
+exportpath = 'run'
+
+INDIVIDUAL:
+nbsimulatedparameters = 21
+

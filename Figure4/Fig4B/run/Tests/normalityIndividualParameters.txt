@@ -1,0 +1,5 @@
+parameter,statistics,p-value,test
+tin,0.0777095,0.764073,Kolmogorov-Smirnov
+beta,0.978384,0.298886,Shapiro-Wilk
+delta,0.976589,0.397715,Shapiro-Wilk
+p,0.981174,0.254574,Shapiro-Wilk
